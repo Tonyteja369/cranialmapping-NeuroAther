@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { STREAM_PROTOCOL } from "@/lib/nsx/parser";
 
 export const Route = createFileRoute("/settings")({
-  head: head("Settings", "Serial protocol, sensor labels, processing defaults and units for NeuroSense-X."),
+  head: head("Settings", "Serial protocol, sensor labels, processing defaults and units for Neuro Ather."),
   component: SettingsPage,
 });
 
@@ -25,9 +25,9 @@ function SettingsPage() {
           <label className="lbl">Baud<input className="field w-28" type="number" value={st.baud} onChange={num("baud")} /></label>
           <label className="lbl">Delimiter<select className="field" value={st.delimiter} onChange={(e) => updateSettings({ delimiter: e.target.value })}><option value=",">comma</option><option value=";">semicolon</option><option value="\t">tab</option><option value=" ">space</option></select></label>
           <label className="lbl">Column order (t,id,ax,ay,az; use _ to skip)<input className="field w-64 font-mono" value={st.columns} onChange={(e) => updateSettings({ columns: e.target.value })} /></label>
-          <label className="lbl">Incoming unit<select className="field" value={st.inputUnit} onChange={(e) => updateSettings({ inputUnit: e.target.value as "g" | "ms2" })}><option value="g">g</option><option value="ms2">m/s²</option></select></label>
+          <label className="lbl">Incoming unit<select className="field" value={st.inputUnit} onChange={(e) => updateSettings({ inputUnit: e.target.value as "g" | "ms2" })}><option value="g">g</option><option value="ms2">m/sÂ²</option></select></label>
           <label className="lbl">Device timestamp unit<select className="field" value={st.timestampUnit} onChange={(e) => updateSettings({ timestampUnit: e.target.value as Settings["timestampUnit"] })}><option value="ms">milliseconds</option><option value="us">microseconds</option><option value="s">seconds</option></select></label>
-          <label className="lbl">Firmware sensor IDs<select className="field" value={st.sensorIdBase} onChange={(e) => updateSettings({ sensorIdBase: Number(e.target.value) as 0 | 1 })}><option value={1}>1–3 → Sensor 1–3</option><option value={0}>0–2 → Sensor 1–3</option></select></label>
+          <label className="lbl">Firmware sensor IDs<select className="field" value={st.sensorIdBase} onChange={(e) => updateSettings({ sensorIdBase: Number(e.target.value) as 0 | 1 })}><option value={1}>1â€“3 â†’ Sensor 1â€“3</option><option value={0}>0â€“2 â†’ Sensor 1â€“3</option></select></label>
           <Button variant="outline" size="sm" className="btn" onClick={() => updateSettings(STREAM_PROTOCOL)}>Five-field protocol</Button>
           <Button variant="outline" size="sm" className="btn" onClick={() => updateSettings({ columns: "timestamp_us,sample,sensor_id,ax,ay,az,gx,gy,gz,temperature_C", timestampUnit: "us" })}>Extended CSV protocol</Button>
         </fieldset>
@@ -52,9 +52,9 @@ function SettingsPage() {
         <div className="flex flex-wrap gap-3">
           <label className="lbl">Configured sampling rate metadata (Hz)<input className="field w-28" type="number" value={st.nominalRateHz} onChange={num("nominalRateHz")} /></label>
           <label className="lbl">Chart window (s)<input className="field w-24" type="number" value={st.windowSec} onChange={num("windowSec")} /></label>
-          <label className="lbl">Display unit<select className="field" value={st.displayUnit} onChange={(e) => updateSettings({ displayUnit: e.target.value as "g" | "ms2" })}><option value="g">g</option><option value="ms2">m/s²</option></select></label>
+          <label className="lbl">Display unit<select className="field" value={st.displayUnit} onChange={(e) => updateSettings({ displayUnit: e.target.value as "g" | "ms2" })}><option value="g">g</option><option value="ms2">m/sÂ²</option></select></label>
         </div>
-        <div className={meas && Math.abs(meas - st.nominalRateHz) / st.nominalRateHz > 0.05 ? "notice mt-3" : "notice-info mt-3"}>Configured {st.nominalRateHz} Hz vs measured {meas ? meas.toFixed(2) : "—"} Hz. All calculations use the measured rate from timestamps; the configured value is metadata only.</div>
+        <div className={meas && Math.abs(meas - st.nominalRateHz) / st.nominalRateHz > 0.05 ? "notice mt-3" : "notice-info mt-3"}>Configured {st.nominalRateHz} Hz vs measured {meas ? meas.toFixed(2) : "â€”"} Hz. All calculations use the measured rate from timestamps; the configured value is metadata only.</div>
         <p className="mt-2 text-[11px] text-muted-foreground">Filter, FFT size, window, peak threshold and frequency range are configured in Signal Processing. Data are stored locally in IndexedDB; clearing site data removes them.</p>
       </Panel>
     </Page>

@@ -19,9 +19,9 @@ export const Route = createFileRoute("/parameters/$param")({
   },
   head: ({ loaderData }) => ({
     meta: [
-      { title: `${loaderData?.title ?? "Parameter"} · NeuroSense-X` },
+      { title: `${loaderData?.title ?? "Parameter"} Â· Neuro Ather` },
       { name: "description", content: `Detailed ${loaderData?.title ?? ""} analysis from measured three-sensor data.` },
-      { property: "og:title", content: `${loaderData?.title ?? "Parameter"} · NeuroSense-X` },
+      { property: "og:title", content: `${loaderData?.title ?? "Parameter"} Â· Neuro Ather` },
       { property: "og:description", content: "Measured parameter analysis." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -34,7 +34,7 @@ function ParamPage() {
   const p = Route.useLoaderData();
   const View = VIEWS[p.id];
   return (
-    <Page title={`${p.n}. ${p.title}`} subtitle="Measured Parameters · detailed analysis" actions={
+    <Page title={`${p.n}. ${p.title}`} subtitle="Measured Parameters Â· detailed analysis" actions={
       <div className="flex flex-wrap gap-1">{PARAMS.map((x) => <Link key={x.id} to="/parameters/$param" params={{ param: x.id }} className={`btn h-7 text-xs ${x.id === p.id ? "btn-primary" : ""}`}>{x.n}</Link>)}</div>
     }>
       <View />

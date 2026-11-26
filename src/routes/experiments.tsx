@@ -12,7 +12,7 @@ import { datasetSpan } from "@/lib/nsx/analysis";
 import type { Experiment } from "@/lib/nsx/types";
 
 export const Route = createFileRoute("/experiments")({
-  head: head("Experiments", "Create, save, open, duplicate, export and delete NeuroSense-X experiments stored in your browser."),
+  head: head("Experiments", "Create, save, open, duplicate, export and delete Neuro Ather experiments stored in your browser."),
   component: Experiments,
 });
 
@@ -44,7 +44,7 @@ function Experiments() {
             <label className="lbl">Excitation waveform<select className="field" value={e.excitationWaveform} onChange={(v) => upd({ excitationWaveform: v.target.value })}>{["none", "sine", "stepped sine", "linear sweep", "log sweep", "impulse/tap"].map((w) => <option key={w}>{w}</option>)}</select></label>
             <label className="lbl">Dataset quality<select className="field" value={e.quality} onChange={(v) => upd({ quality: v.target.value as Experiment["quality"] })}>{["unknown", "good", "warning", "invalid"].map((w) => <option key={w}>{w}</option>)}</select></label>
             <label className="lbl md:col-span-2">Notes<textarea className="field h-16 py-1" value={e.notes} onChange={(v) => upd({ notes: v.target.value })} /></label>
-            <div className="text-xs text-muted-foreground">Created {new Date(e.createdAt).toLocaleString()}<br />Acq. {e.acqStart ? new Date(e.acqStart).toLocaleTimeString() : "—"} → {e.acqEnd ? new Date(e.acqEnd).toLocaleTimeString() : "—"}<br />{s.samples.length} samples · {span ? span.durS.toFixed(2) : 0} s</div>
+            <div className="text-xs text-muted-foreground">Created {new Date(e.createdAt).toLocaleString()}<br />Acq. {e.acqStart ? new Date(e.acqStart).toLocaleTimeString() : "â€”"} â†’ {e.acqEnd ? new Date(e.acqEnd).toLocaleTimeString() : "â€”"}<br />{s.samples.length} samples Â· {span ? span.durS.toFixed(2) : 0} s</div>
           </div>
         )}
       </Panel>

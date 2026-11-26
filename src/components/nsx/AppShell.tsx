@@ -37,7 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground"><Radar className="h-4 w-4" /></div>
           {!collapsed && (
             <div className="leading-tight">
-              <div className="text-sm font-semibold tracking-tight">NeuroSense-X</div>
+              <div className="text-sm font-semibold tracking-tight">Neuro Ather</div>
               <div className="text-[10px] text-muted-foreground">Cranial Resonance Lab</div>
             </div>
           )}
@@ -63,7 +63,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex min-w-0 items-center gap-2 text-xs">
             <Gauge className="h-4 w-4 text-muted-foreground" />
             <span className="text-muted-foreground">Experiment</span>
-            <span className="truncate font-mono font-medium">{s.experiment ? `${s.experiment.id} · ${s.experiment.title}` : "none active"}</span>
+            <span className="truncate font-mono font-medium">{s.experiment ? `${s.experiment.id} Â· ${s.experiment.title}` : "none active"}</span>
             {s.source === "demo" && <span className="tag tag-demo">DEMO</span>}
           </div>
           <div className="ml-auto flex items-center gap-3 text-xs">

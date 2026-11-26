@@ -8,9 +8,9 @@ import type { DataSource, Experiment, Settings } from "./types";
 /** Standard PDF fonts only cover WinAnsi; map scientific glyphs to safe text so nothing renders as garbage. */
 export function pdfSafe(t: string) {
   return String(t)
-    .replace(/ζ/g, "zeta").replace(/δ/g, "delta").replace(/Δ/g, "d").replace(/Σ/g, "sum").replace(/√/g, "sqrt")
-    .replace(/≈/g, "~").replace(/[−–]/g, "-").replace(/≥/g, ">=").replace(/≤/g, "<=").replace(/²/g, "^2").replace(/π/g, "pi")
-    .replace(/[→]/g, "->").replace(/[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FF—•·×]/g, "?");
+    .replace(/Î¶/g, "zeta").replace(/Î´/g, "delta").replace(/Î”/g, "d").replace(/Î£/g, "sum").replace(/âˆš/g, "sqrt")
+    .replace(/â‰ˆ/g, "~").replace(/[âˆ’â€“]/g, "-").replace(/â‰¥/g, ">=").replace(/â‰¤/g, "<=").replace(/Â²/g, "^2").replace(/Ï€/g, "pi")
+    .replace(/[â†’]/g, "->").replace(/[^\x09\x0A\x0D\x20-\x7E\u00A0-\u00FFâ€”â€¢Â·Ã—]/g, "?");
 }
 
 const mm = (a: number[]) => { let lo = Infinity, hi = -Infinity; for (const v of a) if (isFinite(v)) { if (v < lo) lo = v; if (v > hi) hi = v; } return [lo, hi]; };
@@ -36,7 +36,7 @@ export function buildReport(exp: Experiment, sensors: SensorAnalysis[], st: Sett
     for (const line of doc.splitTextToSize(pdfSafe(t), CW) as string[]) { ensure(lh); doc.text(line, M, y + lh * 0.75); y += lh; }
     y += 2.5;
   };
-  const na = (t: string) => p(`Not available — ${t}`, 9, "italic");
+  const na = (t: string) => p(`Not available â€” ${t}`, 9, "italic");
   const table = (head: string[], body: (string | number)[][], opts: { widths?: number[] } = {}) => {
     ensure(16);
     autoTable(doc, {
@@ -77,21 +77,21 @@ export function buildReport(exp: Experiment, sensors: SensorAnalysis[], st: Sett
     y = yTop + h + 8;
     p(`Figure: ${title}. Experiment ${exp.id}.`, 8, "italic");
   };
-  const f = (v: number, d = 4) => (isFinite(v) ? v.toFixed(d) : "—");
+  const f = (v: number, d = 4) => (isFinite(v) ? v.toFixed(d) : "â€”");
   const fs = sensors.find((s) => isFinite(s.fs))?.fs ?? NaN;
   const withData = sensors.filter((s) => s.q.n > 0);
-  const srcLabel = source === "demo" ? "DEMO DATA (synthetic — not a measurement)" : source === "imported" ? "Imported experiment data" : "Live hardware data";
+  const srcLabel = source === "demo" ? "DEMO DATA (synthetic â€” not a measurement)" : source === "imported" ? "Imported experiment data" : "Live hardware data";
 
   // Cover
   doc.setFillColor(...NAVY); doc.rect(0, 0, W, 92, "F");
-  doc.setTextColor(255); doc.setFont("helvetica", "bold"); doc.setFontSize(26); doc.text("NeuroSense-X", M, 40);
-  doc.setFont("helvetica", "normal"); doc.setFontSize(12); doc.text("Cranial Resonance Lab — Experiment Research Report", M, 52);
+  doc.setTextColor(255); doc.setFont("helvetica", "bold"); doc.setFontSize(26); doc.text("Neuro Ather", M, 40);
+  doc.setFont("helvetica", "normal"); doc.setFontSize(12); doc.text("Cranial Resonance Lab â€” Experiment Research Report", M, 52);
   doc.setFontSize(9.5); doc.text(doc.splitTextToSize("Mechanical vibration measurement at three MPU6050 surface locations", CW), M, 62);
   y = 108;
   kv([["Experiment ID", exp.id], ["Title", exp.title], ["Data source", srcLabel], ["Created", new Date(exp.createdAt).toLocaleString()],
-    ["Acquisition", `${exp.acqStart ? new Date(exp.acqStart).toLocaleString() : "—"} to ${exp.acqEnd ? new Date(exp.acqEnd).toLocaleString() : "—"}`],
+    ["Acquisition", `${exp.acqStart ? new Date(exp.acqStart).toLocaleString() : "â€”"} to ${exp.acqEnd ? new Date(exp.acqEnd).toLocaleString() : "â€”"}`],
     ["Report generated", new Date().toLocaleString()], ["Samples", String(sensors.reduce((a, s) => a + s.q.n, 0))], ["Quality status", exp.quality]]);
-  p("Research-prototype disclaimer: NeuroSense-X is an educational and research prototype. It is not a medical device, has no clinical validation and provides no diagnosis. Results describe mechanical vibration measured at three surface locations under the stated configuration.", 8.5, "italic");
+  p("Research-prototype disclaimer: Neuro Ather is an educational and research prototype. It is not a medical device, has no clinical validation and provides no diagnosis. Results describe mechanical vibration measured at three surface locations under the stated configuration.", 8.5, "italic");
   if (source === "demo") p("THIS REPORT IS GENERATED FROM SYNTHETIC DEMONSTRATION DATA. IT CONTAINS NO MEASUREMENTS.", 10, "bold");
   newPage();
 
@@ -102,11 +102,11 @@ export function buildReport(exp: Experiment, sensors: SensorAnalysis[], st: Sett
 
   h1("Experimental Configuration");
   const ap = exp.acquisitionProtocol;
-  kv([["Hardware", "ESP32-WROOM-32, TCA9548A I2C multiplexer, 3 × MPU6050 (±2 g), USB serial"], ["Excitation", exp.excitationHz != null ? `${exp.excitationHz} Hz ${exp.excitationWaveform}` : `none documented (${exp.excitationWaveform})`],
+  kv([["Hardware", "ESP32-WROOM-32, TCA9548A I2C multiplexer, 3 Ã— MPU6050 (Â±2 g), USB serial"], ["Excitation", exp.excitationHz != null ? `${exp.excitationHz} Hz ${exp.excitationWaveform}` : `none documented (${exp.excitationWaveform})`],
     ["Wire protocol", ap ? `${ap.columns} (delim "${ap.delimiter}", ${ap.inputUnit}, ts ${ap.timestampUnit}, IDs from ${ap.sensorIdBase})` : `${st.columns} (delim "${st.delimiter}", ${st.inputUnit})`],
     ["Firmware", ap?.firmware ?? "not reported"], ["Display unit", unit], ["Processing", `baseline ${st.baseline}; filter ${st.filter.type}${st.filter.type === "movingavg" ? ` (${st.filter.taps} taps)` : st.filter.type !== "none" ? ` (cutoff ${st.filter.cutoffHz} Hz)` : ""}; FFT ${st.fftSize} pts, ${st.windowFn} window`],
-    ["Calibration", exp.calibration ? `${exp.calibration.method} (${exp.calibration.applied ? "applied" : "not applied"}) at ${exp.calibration.timestamp}` : "none — values are uncalibrated raw readings"]]);
-  table(["Sensor", "Location label", "Map position"], sensors.map((s) => [`S${s.id}`, exp.sensorLabels[s.id] ?? s.label, st.sensorPositions[s.id] ?? "—"]), { widths: [20, 90, CW - 110] });
+    ["Calibration", exp.calibration ? `${exp.calibration.method} (${exp.calibration.applied ? "applied" : "not applied"}) at ${exp.calibration.timestamp}` : "none â€” values are uncalibrated raw readings"]]);
+  table(["Sensor", "Location label", "Map position"], sensors.map((s) => [`S${s.id}`, exp.sensorLabels[s.id] ?? s.label, st.sensorPositions[s.id] ?? "â€”"]), { widths: [20, 90, CW - 110] });
 
   h1("Data Acquisition & Quality");
   p("Sensors are read sequentially through the multiplexer; samples from different sensors are not simultaneous. Rates are measured from device timestamps.");
@@ -141,7 +141,7 @@ export function buildReport(exp: Experiment, sensors: SensorAnalysis[], st: Sett
     p(`Project-defined MSI = 1 - |A-B|/(A+B) on RMS vibration, S${a} vs S${b}: ${f(msi(sensors[a - 1].rmsVib, sensors[b - 1].rmsVib), 3)}. Not a clinical metric; meaningful only for mirror-image sensor placement.`);
 
     h1("Damping Behaviour");
-    if (exp.decayStartMs != null) table(["Sensor", "zeta", "log decrement", "R^2", "Result"], sensors.map((s) => { const d = s.t.length ? dampingEstimate(s.t, s.processed, exp.decayStartMs!) : null; return d?.ok ? [`S${s.id}`, d.zeta.toFixed(5), d.delta.toFixed(4), d.r2.toFixed(3), "estimated"] : [`S${s.id}`, "—", "—", "—", `insufficient: ${d?.reason ?? "no samples"}`]; }));
+    if (exp.decayStartMs != null) table(["Sensor", "zeta", "log decrement", "R^2", "Result"], sensors.map((s) => { const d = s.t.length ? dampingEstimate(s.t, s.processed, exp.decayStartMs!) : null; return d?.ok ? [`S${s.id}`, d.zeta.toFixed(5), d.delta.toFixed(4), d.r2.toFixed(3), "estimated"] : [`S${s.id}`, "â€”", "â€”", "â€”", `insufficient: ${d?.reason ?? "no samples"}`]; }));
     else na("no documented free-decay interval");
   } else { h1("Measurements"); na("this experiment contains no valid sensor samples"); }
 
@@ -159,7 +159,7 @@ export function buildReport(exp: Experiment, sensors: SensorAnalysis[], st: Sett
   if (ob.blocked.length) table(["Analyses not completed"], ob.blocked.map((x) => [x]));
 
   h1("Interpretation & Limitations");
-  p(`Measurable frequency is limited by the Nyquist frequency (${f(fs / 2, 1)} Hz); the transducer band (300 Hz–19 kHz) is above it. Sampling is multiplexed and non-simultaneous. Software baseline correction is not metrological calibration. Three surface sensors cannot represent whole-skull behaviour or internal anatomy.${source === "demo" ? " DATA ARE SYNTHETIC DEMO DATA." : ""}`);
+  p(`Measurable frequency is limited by the Nyquist frequency (${f(fs / 2, 1)} Hz); the transducer band (300 Hzâ€“19 kHz) is above it. Sampling is multiplexed and non-simultaneous. Software baseline correction is not metrological calibration. Three surface sensors cannot represent whole-skull behaviour or internal anatomy.${source === "demo" ? " DATA ARE SYNTHETIC DEMO DATA." : ""}`);
   h1("Conclusion");
   p(withData.length ? `Measured RMS vibration: ${sensors.map((s) => `S${s.id} ${f(s.rmsVib)} ${unit}`).join(", ")}. ${sensors.some((s) => s.peaks.length) ? "Candidate spectral peaks are listed above." : "No candidate spectral peaks exceeded threshold."} No medical conclusions are drawn.` : "No conclusion can be drawn without valid samples.");
   h1("References & Technical Notes");
@@ -172,12 +172,12 @@ export function buildReport(exp: Experiment, sensors: SensorAnalysis[], st: Sett
     doc.setPage(i);
     doc.setFont("helvetica", "normal"); doc.setFontSize(7.5); doc.setTextColor(110);
     if (i > 1) {
-      doc.text("NeuroSense-X · Cranial Resonance Lab", M, 13);
-      doc.text(doc.splitTextToSize(pdfSafe(`${exp.id} · ${exp.title}`), 90)[0], W - M, 13, { align: "right" });
+      doc.text("Neuro Ather Â· Cranial Resonance Lab", M, 13);
+      doc.text(doc.splitTextToSize(pdfSafe(`${exp.id} Â· ${exp.title}`), 90)[0], W - M, 13, { align: "right" });
       doc.setDrawColor(200); doc.setLineWidth(0.2); doc.line(M, 16, W - M, 16);
     }
     doc.setDrawColor(200); doc.line(M, H - 14, W - M, H - 14);
-    doc.text(source === "demo" ? "Synthetic demo data — not a measurement" : "Research prototype — not a medical device", M, H - 9);
+    doc.text(source === "demo" ? "Synthetic demo data â€” not a measurement" : "Research prototype â€” not a medical device", M, H - 9);
     doc.text(`Page ${i} of ${n}`, W - M, H - 9, { align: "right" });
   }
   return doc;
